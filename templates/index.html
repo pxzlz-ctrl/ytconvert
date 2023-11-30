@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>YouTube Convert</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link href="/static/main.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="logoContainer">
+      <img href="/" class="logo" src="/static/logo.png"></img>
+    </div>
+
+    <div class="mainContent">
+      <div class="convertOptionsForm">
+        <form action="/download" method="POST" onsubmit="return validateForm()">
+          <label for="ytUrlLabel">YouTube URL:</label><br>
+          <input type="text" id="ytUrl" name="ytUrl" placeholder="https://www.youtube.com/watch?v=" required><br>
+          <input type="radio" name="format" value="mp4" checked> MP4
+          <input type="radio" name="format" value="mp3"> MP3<br>
+          <input type="submit" value="Download">
+        </form>
+      </div>
+    </div>
+    <script>
+      function validateForm() {
+        var ytUrl = document.getElementById('ytUrl').value;
+        if (!ytUrl.startsWith('https://www.youtube.com/watch?v=')) {
+          alert('Please enter a valid YouTube URL');
+          return false;
+        }
+        return true;
+      }
+    </script>
+  </body>
+</html>
