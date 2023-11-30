@@ -43,4 +43,4 @@ def download_youtube():
         if file_path is not None:
             os.remove(file_path)
 
-app.run(host='0.0.0.0', port=8080)
+app.run()
