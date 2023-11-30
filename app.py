@@ -19,7 +19,7 @@ def clean_filename(title):
 def download_youtube():
     yt_url = request.form['ytUrl']
     format = request.form['format']
-    file_path = None
+    tmp_file_path = None
     
     try:
         yt = YouTube(yt_url, on_progress_callback=None)
