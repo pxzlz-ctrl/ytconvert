@@ -21,9 +21,19 @@ def download_youtube():
     file_path = None
     try:
         yt = YouTube(yt_url, on_progress_callback=None)
-        stream = yt.streams.filter(only_audio=format == 'mp3').first()
-        filename = clean_filename(yt.title) + ('.mp3' if format == 'mp3' else '.mp4')
-        stream.download('static/videos', filename=filename)
+        if format == 'mp4':
+            video_stream = yt.streams.get_highest_resolution()
+            file_extension = 'mp4'
+        elif format == 'mp3':
+            audio_stream = yt.streams.get_audio_only(subtype='mp4')
+            file_extension = 'mp3'
+        
+        filename = clean_filename(yt.title) + '.' + file_extension
+        if format == 'mp4':
+            video_stream.download(output_path='static/videos', filename=filename)
+        elif format == 'mp3':
+            audio_stream.download(output_path='static/videos', filename=filename)
+            
         file_path = os.path.join('static', 'videos', filename)
         return send_file(file_path, as_attachment=True)
     except Exception as e:
