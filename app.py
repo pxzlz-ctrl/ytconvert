@@ -42,5 +42,3 @@ def download_youtube():
     finally:
         if file_path is not None:
             os.remove(file_path)
-
-app.run()
