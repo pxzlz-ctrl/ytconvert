@@ -28,7 +28,7 @@
         var ytUrl = document.getElementById('ytUrl').value;
     
         // Check if the URL starts with either format
-        if (!ytUrl.startsWith('https://www.youtube.com/watch?v=') || !ytUrl.startsWith('https://youtu.be/')) {
+        if (!ytUrl.startsWith('https://www.youtube.com/watch?v=') && !ytUrl.startsWith('https://youtu.be/')) {
           alert('Please enter a valid YouTube URL');
           return false;
         }
