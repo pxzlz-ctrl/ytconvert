@@ -26,12 +26,15 @@
     <script>
       function validateForm() {
         var ytUrl = document.getElementById('ytUrl').value;
-        if (!ytUrl.startsWith('https://www.youtube.com/watch?v=')) {
+    
+        // Check if the URL starts with either format
+        if (!ytUrl.startsWith('https://www.youtube.com/watch?v=') && !ytUrl.startsWith('https://youtu.be/')) {
           alert('Please enter a valid YouTube URL');
           return false;
         }
+    
         return true;
       }
-    </script>
+  </script>
   </body>
 </html>
