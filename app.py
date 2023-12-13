@@ -39,16 +39,18 @@ async def background_task(yt_url, file_format):
     # Perform any additional processing or notifications here
     return tmp_file_path
 
-@app.route('/')
-def serve_main():
-    return render_template('index.html')
+def handler(event, context):
+    if event['httpMethod'] == 'POST':
+        data = json.loads(event['body'])
+        yt_url = data.get('ytUrl')
+        file_format = data.get('format')
 
-@app.route('/download', methods=['POST'])
-def initiate_download():
-    yt_url = request.form.get('ytUrl')
-    file_format = request.form.get('format')
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        result = loop.run_until_complete(background_task(yt_url, file_format))
+        loop.close()
 
-    # Start the background download task
-    asyncio.create_task(background_task(yt_url, file_format))
-
-    return jsonify({'status': 'Download initiated. You will be notified when it\'s ready.'})
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'status': 'Download complete.', 'file_path': result})
+        }
