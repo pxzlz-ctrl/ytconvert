@@ -14,12 +14,7 @@ def clean_filename(title):
     clean_title = title.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation))).replace('  ', ' ').strip()
     return clean_title
 
-@app.route('/download', methods=['POST'])
-def download_youtube():
-    yt_url = request.form['ytUrl']
-    file_format = request.form['format']
-    tmp_file_path = None
-    
+def download_youtube_video(yt_url, file_format):
     try:
         youtube_video = YouTube(yt_url, on_progress_callback=None)
         
@@ -35,12 +30,24 @@ def download_youtube():
         tmp_file_path = os.path.join('/tmp', filename)
 
         stream.download(output_path='/tmp', filename=filename)
-        
-        return send_file(tmp_file_path, as_attachment=True)
+
+        return tmp_file_path
     except PytubeError as e:
-        return f"Pytube error occurred: {e}"
+        raise Exception(f"Pytube error occurred: {e}")
     except Exception as e:
-        return f"An error occurred: {e}"
+        raise Exception(f"An error occurred: {e}")
+
+@app.route('/download', methods=['POST'])
+def download_youtube():
+    yt_url = request.form.get('ytUrl')
+    file_format = request.form.get('format')
+    tmp_file_path = None
+    
+    try:
+        tmp_file_path = download_youtube_video(yt_url, file_format)
+        return send_file(tmp_file_path, as_attachment=True)
+    except Exception as e:
+        return str(e)
     finally:
         if tmp_file_path is not None:
             os.remove(tmp_file_path)
